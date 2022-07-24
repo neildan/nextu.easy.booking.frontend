@@ -7,18 +7,44 @@
   font-weight: normal;
 }
 
+@font-face {
+  font-family: "Mithella-Regular";
+  src: url("/fonts/Mithella-Regular.otf");
+}
+
+/* Tipografía titulo */
+
+@font-face {
+  font-family: "Friendly-Schoolmates";
+  src: url("/fonts/Friendly-Schoolmates.otf");
+}
+
 body {
   width: 100%;
   max-width: 100%;
   min-height: 100vh;
   transition: color 0.5s, background-color 0.5s;
   line-height: 1.6;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-    Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: "Friendly-Schoolmates";
   font-size: 15px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-family: "Friendly-Schoolmates";
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+label {
+  font-family: "Mithella-Regular";
 }
 
 .center-img {
@@ -33,4 +59,12 @@ audio {
 
 .container {
   min-height: 85vh !important;
+}
+
+h1, h5 {
+  color: #254690;
+}
+
+h3 {
+  color: #212529;
 }

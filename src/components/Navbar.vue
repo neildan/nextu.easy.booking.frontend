@@ -11,9 +11,9 @@ export default {
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand text-end" href="#">
         <figure>
-          <img src="img/logo.png" alt="Logo" />
+          <img src="/logo.png" alt="Logo" />
         </figure>
       </a>
       <button
@@ -48,10 +48,13 @@ export default {
 <style scoped>
 #title {
   font-weight: bold;
-  font-size: 2rem;
+  font-size: 2.2rem;
 }
 figure {
   margin: 0px;
+}
+figure > img {
+  width: 50%;
 }
 .nav-link {
   color: white;

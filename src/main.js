@@ -6,11 +6,17 @@ import "bootstrap"
 // Components
 import DashboardVue from './components/Dashboard.vue'
 import AuthVue from './components/Auth.vue'
+import ScheduleEventVue from './components/ScheduleEvent.vue'
 
 const routes = [
     {
         path: '/',
         component: DashboardVue
+    },
+    {
+        path: '/function/:id',
+        component: ScheduleEventVue,
+        name: 'schedule'
     },
     {
         path: '/auth',
