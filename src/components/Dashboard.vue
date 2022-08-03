@@ -14,7 +14,6 @@ export default {
   methods: {
     searchEvents() {
       let search = document.getElementById("search-events").value.toLowerCase();
-      console.log(search);
       this.listEvents.forEach(function (elem) {
         if (elem.content.name.toLowerCase().indexOf(search) == -1) {
           elem.className = "hide";
@@ -41,7 +40,6 @@ export default {
       } catch (e) {
         this.errorLoad = e;
       }
-      console.log("termine: ", this.listEvents);
     },
   },
   mounted() {
@@ -90,7 +88,13 @@ export default {
                 :key="funtionContent.id"
               >
                 <router-link
-                  :to="{name:'schedule', params: {id: funtionContent.id}}"
+                  :to="{
+                    name: 'schedule',
+                    params: {
+                      id: funtionContent.id,
+                      eventId: item.content.id,
+                    },
+                  }"
                   class="col-12 ml-2 mb-2 btn btn-outline-success btn-sm"
                   id="funtionContent.id"
                   >{{ funtionContent.hour }}</router-link

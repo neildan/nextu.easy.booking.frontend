@@ -37,7 +37,7 @@ export default {
         next = error;
       }
       if (next) {
-        window.location.href = "http://localhost:3000";
+        window.location.href = window.location.href.slice(0,22);
       }
     },
   },

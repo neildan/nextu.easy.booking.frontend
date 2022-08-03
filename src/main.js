@@ -14,8 +14,9 @@ const routes = [
         component: DashboardVue
     },
     {
-        path: '/function/:id',
+        path: '/function/:id/:eventId',
         component: ScheduleEventVue,
+        props: true,
         name: 'schedule'
     },
     {
