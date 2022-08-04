@@ -61,15 +61,15 @@ export default {
                 id="emailAuth"
                 aria-describedby="emailHelp"
               />
-              <small class="error" v-show="this.errorEmail.show">{{
-                this.errorEmail.message
+              <small class="error" v-show="errorEmail.show">{{
+                errorEmail.message
               }}</small>
             </div>
             <div class="mb-3">
               <label for="passwordAuth" class="form-label">Contraseña</label>
               <input type="password" class="form-control" id="passwordAuth" />
-              <small class="error" v-show="this.errorPassword.show">{{
-                this.errorPassword.message
+              <small class="error" v-show="errorPassword.show">{{
+                errorPassword.message
               }}</small>
             </div>
             <button @click="submit" type="button" class="btn btn-primary">

@@ -1,7 +1,8 @@
 <script>
 let host = `http://localhost:1337`;
-let routeSpectatorFunctions = "/api/spectatorFunctions";
 let routeEvents = "/api/events";
+let routeSpectators = "/api/spectators";
+let routeSpectatorFunctions = "/api/spectatorFunctions";
 
 export default {
   props: ["id", "eventId"],
@@ -25,7 +26,20 @@ export default {
       },
       timerSecCount: 59,
       timerMinCount: 4,
-      classTimer: 'timer-good'
+      classTimer: "timer-good",
+      errorEmail: {
+        show: false,
+        message: "Obligatorio. No es un correo valido",
+      },
+      errorPhone: {
+        show: false,
+        message: "Obligatorio. Mínimo debe ser 7 numeros",
+      },
+      errorChairs: {
+        show: false,
+        message: "Obligatorio. Debe reservar por lo menos 1 silla",
+      },
+      idSpectator: 0,
     };
   },
   methods: {
@@ -95,28 +109,111 @@ export default {
         this.emojisIcons = "";
       }
     },
-    sendForm() {
-      console.log(this.form);
+    async saveSpectator() {
+      let url = `${host}${routeSpectators}`;
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: this.form.email,
+            phone: this.form.phone,
+          }),
+        });
+        const dataResponse = await response.json();
+        if (!dataResponse) throw "Fallo al guardar persona";
+        if (!dataResponse.success || dataResponse.data.length == 0)
+          throw dataResponse.msj;
+        this.idSpectator = dataResponse.data.id;
+        return true;
+      } catch (e) {
+        this.errorLoad = e;
+        return false;
+      }
+    },
+    async saveFunctionSpectator() {
+      let url = `${host}${routeSpectatorFunctions}`;
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chair: parseInt(this.form.chairs),
+            spectator_id: parseInt(this.idSpectator),
+            function_id: parseInt(this.id),
+          }),
+        });
+        const dataResponse = await response.json();
+        if (!dataResponse) throw "Fallo al guardar la reserva";
+        if (!dataResponse.success || dataResponse.data.length == 0)
+          throw dataResponse.msj;
+        return true;
+      } catch (e) {
+        this.errorLoad = e;
+        return false;
+      }
+    },
+    async sendForm() {
+      try {
+        if (!this.form.chairs || this.form.chairs == 0) {
+          this.errorChairs.show = true;
+          throw false;
+        } else if (this.form.chairs > 0 && this.errorChairs.show == true) {
+          this.errorChairs.show = false;
+        }
+
+        if (!this.form.phone || this.form.phone.length < 7) {
+          this.errorPhone.show = true;
+          throw false;
+        } else if (this.form.phone >= 7 && this.errorPhone.show == true) {
+          this.errorPhone.show = false;
+        }
+
+        const emailRegex =
+          /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        if (
+          !this.form.email ||
+          this.form.email.length == 0 ||
+          !this.form.email.match(emailRegex)
+        ) {
+          this.errorEmail.show = true;
+          throw false;
+        } else if (
+          this.form.email.length > 0 &&
+          this.errorEmail.show == true &&
+          this.form.email.match(emailRegex)
+        ) {
+          this.errorEmail.show = false;
+        }
+
+        if (await this.saveSpectator()) {
+          if (!this.saveFunctionSpectator()) throw false;
+          let redirectRoute = window.location.href.slice(0, 22);
+          window.location.href = `${redirectRoute}${this.nameEvent}`
+        }
+      } catch (e) {}
     },
   },
   mounted() {
+    document.getElementById("chairsInput").disabled = true;
     this.getEventById();
     this.getInputFuntions();
   },
   watch: {
     timerSecCount: {
       handler() {
-        if(this.timerMinCount == 2 && this.classTimer == 'timer-good') this.classTimer = 'timer-bad';
-        if (this.timerMinCount >= 0 && this.timerSecCount > 0 ) {
+        if (this.timerMinCount == 2 && this.classTimer == "timer-good")
+          this.classTimer = "timer-bad";
+        if (this.timerMinCount >= 0 && this.timerSecCount > 0) {
           setTimeout(() => {
             this.timerSecCount--;
-            if(this.timerSecCount == 0) {
+            if (this.timerSecCount == 0) {
               this.timerMinCount--;
-              this.timerSecCount = 59
+              this.timerSecCount = 59;
             }
           }, 1000);
         } else {
-          window.location.href = window.location.href.slice(0,22);
+          window.location.href = window.location.href.slice(0, 22);
         }
       },
       immediate: true,
@@ -140,6 +237,9 @@ export default {
               class="form-control"
               id="email"
             />
+            <small class="error" v-show="errorEmail.show">{{
+              errorEmail.message
+            }}</small>
           </div>
           <div class="mb-3">
             <label for="phone" class="form-label">Numero telefonico</label>
@@ -149,6 +249,9 @@ export default {
               class="form-control"
               id="phone"
             />
+            <small class="error" v-show="errorPhone.show">{{
+              errorPhone.message
+            }}</small>
           </div>
           <div class="mb-3">
             <label for="chairs" class="form-label">Cantidad de sillas</label>
@@ -157,7 +260,6 @@ export default {
               v-model="form.chairs"
               id="chairsInput"
               class="form-select"
-              disabled
             >
               <option selected value="0">Seleccione</option>
               <option
@@ -168,6 +270,9 @@ export default {
                 {{ item.name }}
               </option>
             </select>
+            <small class="error" v-show="errorChairs.show">{{
+              errorChairs.message
+            }}</small>
           </div>
         </div>
       </div>
@@ -191,8 +296,9 @@ export default {
         @click="sendForm"
         class="col-12 btn btn-primary btn-sm"
       >
-        Guardar
+        Reservar
       </button>
+      <p>{{ errorLoad }}</p>
     </div>
   </div>
 </template>
@@ -205,12 +311,14 @@ export default {
   text-align: center;
   margin-bottom: 0px;
 }
-
 .timer-good {
   color: green;
 }
-
 .timer-bad {
   color: red;
+}
+.error {
+  color: red;
+  font-weight: bold;
 }
 </style>

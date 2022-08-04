@@ -2,7 +2,6 @@ import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import App from './App.vue'
 import "bootstrap/dist/css/bootstrap.min.css"
-import "bootstrap"
 // Components
 import DashboardVue from './components/Dashboard.vue'
 import AuthVue from './components/Auth.vue'
@@ -11,7 +10,14 @@ import ScheduleEventVue from './components/ScheduleEvent.vue'
 const routes = [
     {
         path: '/',
-        component: DashboardVue
+        component: DashboardVue,
+        name: 'dashboard'
+    },
+    {
+        path: '/:message',
+        component: DashboardVue,
+        props: true,
+        name: 'notificationDashboard'
     },
     {
         path: '/function/:id/:eventId',

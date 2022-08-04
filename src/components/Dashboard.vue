@@ -1,14 +1,17 @@
 <script>
 let host = `http://localhost:1337`;
 let routeEvents = "/api/events";
+import bootstrap from "bootstrap/dist/js/bootstrap.bundle.js";
 
 export default {
+  props: ["message"],
   data() {
     return {
       title: "Easy Booking tu gran aliado para reservar",
       slogan: "Encuentra la mejor experiencia de tu vida",
       errorLoad: "",
       listEvents: [],
+      showElement: false,
     };
   },
   methods: {
@@ -44,11 +47,47 @@ export default {
   },
   mounted() {
     this.getEvents();
+    if (this.message) {
+      this.showElement = true;
+      let successAlert = document.getElementById("successAlert");
+      new bootstrap.Alert(successAlert);
+    }
   },
 };
 </script>
 
 <template>
+  <div v-show="showElement">
+    <div
+      class="
+        alert alert-success
+        d-flex
+        align-items-center
+        alert-dismissible
+        fade
+        show
+      "
+      role="alert"
+      id="successAlert"
+    >
+      <img
+        src="checked.png"
+        class="bi flex-shrink-0 me-2"
+        width="24"
+        height="24"
+        role="img"
+        aria-label="Success:"
+      />
+      <div><b>Felicidades, agendaste el evento: {{ this.message }}</b></div>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+  </div>
+
   <div class="col-md-12 col-sm-12">
     <figure>
       <img id="img-background" src="/img/dashboard.png" alt="dashboard" />
@@ -124,5 +163,9 @@ figure > img {
 #label-search {
   font-size: 1rem;
   font-weight: bold;
+}
+
+.alert-success{
+  background-color: #aeffae !important;
 }
 </style>
