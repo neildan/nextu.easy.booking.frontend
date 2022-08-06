@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import DashboardVue from './components/Dashboard.vue'
 import AuthVue from './components/Auth.vue'
 import ScheduleEventVue from './components/ScheduleEvent.vue'
+import AdminVue from './components/Admin.vue'
 
 const routes = [
     {
@@ -28,6 +29,11 @@ const routes = [
     {
         path: '/auth',
         component: AuthVue
+    },
+    {
+        path: '/admin',
+        component: AdminVue,
+        name: 'admin'
     },
 ]
 

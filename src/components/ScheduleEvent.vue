@@ -69,7 +69,7 @@ export default {
         if (!dataResponse.success || dataResponse.code != 200)
           throw dataResponse.msj;
         let funtions = dataResponse.data.filter((elem) => {
-          return parseInt(elem.function_id) === parseInt(this.id);
+          return parseInt(elem.function_id.id) === parseInt(this.id);
         });
         let sum = 0;
         if (Object.values(funtions).length > 0) {
@@ -189,7 +189,7 @@ export default {
         if (await this.saveSpectator()) {
           if (!this.saveFunctionSpectator()) throw false;
           let redirectRoute = window.location.href.slice(0, 22);
-          window.location.href = `${redirectRoute}${this.nameEvent}`
+          window.location.href = `${redirectRoute}${this.nameEvent}`;
         }
       } catch (e) {}
     },
@@ -223,8 +223,31 @@ export default {
 </script>
 <template>
   <h1 class="text-center">{{ title }}</h1>
-  <div class="row mt-4">
-    <div class="col-sm-12 col-md-8 mb-4">
+  <div class="row mt-4 mb-4">
+    <div class="col-sm-12 col-md-4 mb-2">
+      <h5>Tiempo restante</h5>
+      <p class="timer">
+        <span :class="classTimer">
+          {{ timerMinCount }} : {{ timerSecCount }}
+        </span>
+      </p>
+      <h5 class="mt-3">Resumen de la compra</h5>
+      <p class="mt-3"><b>Nombre Evento: </b> {{ nameEvent }}</p>
+      <p><b>Hora de la función: </b> {{ hourFunction }}</p>
+      <p><b>Cantidad de sillas: </b> {{ chairsDescription }}</p>
+      <p>
+        {{ emojisIcons }}
+      </p>
+      <button
+        type="button"
+        @click="sendForm"
+        class="col-12 btn btn-primary btn-sm"
+      >
+        Reservar
+      </button>
+      <p>{{ errorLoad }}</p>
+    </div>
+    <div class="col-sm-12 col-md-8 mb-5">
       <div class="card">
         <div class="card-header">{{ cardHeader }}</div>
         <div class="card-body">
@@ -276,29 +299,6 @@ export default {
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-sm-12 col-md-4 mb-3">
-      <h5>Tiempo restante</h5>
-      <p class="timer">
-        <span :class="classTimer">
-          {{ timerMinCount }} : {{ timerSecCount }}
-        </span>
-      </p>
-      <h5 class="mt-3">Resumen de la compra</h5>
-      <p class="mt-3"><b>Nombre Evento: </b> {{ nameEvent }}</p>
-      <p><b>Hora de la función: </b> {{ hourFunction }}</p>
-      <p><b>Cantidad de sillas: </b> {{ chairsDescription }}</p>
-      <p>
-        {{ emojisIcons }}
-      </p>
-      <button
-        type="button"
-        @click="sendForm"
-        class="col-12 btn btn-primary btn-sm"
-      >
-        Reservar
-      </button>
-      <p>{{ errorLoad }}</p>
     </div>
   </div>
 </template>
