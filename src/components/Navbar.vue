@@ -5,6 +5,11 @@ export default {
       title: "Easy Booking",
     };
   },
+  methods: {
+    closeSession() {
+      sessionStorage.removeItem("token");
+    },
+  },
 };
 </script>
 
@@ -31,6 +36,7 @@ export default {
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <router-link
+              @click="closeSession"
               to="/"
               class="nav-link active"
               aria-current="page"
@@ -39,7 +45,9 @@ export default {
             >
           </li>
         </ul>
-        <router-link to="/auth" class="btn btn-outline-success">Administrador</router-link>
+        <router-link to="/auth" class="btn btn-outline-success"
+          >Administrador</router-link
+        >
       </div>
     </div>
   </nav>

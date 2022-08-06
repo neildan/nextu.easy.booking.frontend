@@ -112,11 +112,11 @@ export default {
     aria-label="Search"
   />
 
-  <div v-if="listEvents.length > 0" class="col-12">
+  <div v-if="listEvents.length > 0" class="col-12 mb-5">
     <div class="row">
       <span v-for="item in listEvents" :key="item.id" :class="item.className">
         <div class="card mt-3 ml-4">
-          <img src="/multimedia/img-2.jpg" class="card-img-top" />
+          <img :src="'/multimedia/'+item.content.url_image" class="card-img-top" />
           <div class="card-body">
             <h5 class="card-title">{{ item.content.name }}</h5>
             <p class="card-text">{{ item.content.theater_hall_id.theater }}</p>
